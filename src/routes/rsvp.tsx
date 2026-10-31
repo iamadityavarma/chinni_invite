@@ -2,7 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 
 // Paste your Apps Script web app URL here after deploying code.gs
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwe-YfEC2oDaIMzZ_Xw3Md3iTrZPu4X8wBDRcannCo0Eus7cJv_Lxqi6qdcYBHvQ3fBdQ/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyAZzwPXNSj4NJ3_WoY-K3dIDTGXUNtkEDypdbK1fDkUF5J-HmEQ1qHKxFBD12pGn-4CA/exec";
 
 export const Route = createFileRoute("/rsvp")({
   head: () => ({
@@ -26,7 +26,7 @@ function RsvpPage() {
   const set = (k: keyof typeof form, v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
-  async function submit(e: React.FormEvent<HTMLFormElement>) {
+  async function submit(e: SubmitEvent) {
     e.preventDefault();
     if (!SCRIPT_URL) { setStatus("done"); return; }
     setStatus("sending");

@@ -16,7 +16,7 @@ function doPost(e) {
   lock.waitLock(20000); // avoids two guests overwriting each other
 
   try {
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheets()[0];
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("combined");
 
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(HEADERS);
