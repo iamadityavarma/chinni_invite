@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import { TurmericReveal } from "@/components/turmeric-reveal";
 import cover from "@/assets/cover.jpg";
@@ -28,8 +28,6 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-// TODO: replace with the family's WhatsApp number (country code, digits only)
-const WHATSAPP_NUMBER = "";
 const SOARING = "SoaringHeights, 145 Aero Country Road, McKinney, TX";
 const PRISM = "Prism Las Colinas Irving TX";
 
@@ -37,7 +35,7 @@ const cal = (text: string, start: string, end: string, location: string) =>
   `https://calendar.google.com/calendar/r/eventedit?text=${encodeURIComponent(text)}&dates=${start}/${end}&ctz=America/Chicago&location=${encodeURIComponent(location)}`;
 const maps = (q: string) => `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(q)}`;
 
-type Btn = { label: string; href: string };
+type Btn = { label: string; href: string; internal?: boolean };
 type Ev = { key: string; img: string; btnClass: string; inkClass: string; textTop: string; lines: { t: string; c: string }[]; buttons: Btn[] };
 
 const EVENTS: Ev[] = [
@@ -78,7 +76,7 @@ const EVENTS: Ev[] = [
       { t: "Venue: Prism Las Colinas, Irving", c: "text-base font-semibold" },
     ],
     buttons: [
-      { label: "💜 RSVP", href: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent("Hi! We'd love to join the Wedding Afterparty of Aditya & Vineetha on Dec 13. RSVP from: ")}` },
+      { label: "💜 RSVP", href: "/rsvp", internal: true },
       { label: "📍 Directions", href: maps(PRISM) },
       { label: "📅 Save Date", href: cal("Aditya & Vineetha — Wedding Afterparty", "20261213T183000", "20261213T233000", PRISM) },
     ],
@@ -209,9 +207,13 @@ function Index() {
           >
             <Film key={ev.key} ev={ev} />
             <div className="btn-bar">
-              {ev.buttons.map((b) => (
-                <a key={b.label} href={b.href} target="_blank" rel="noreferrer" className={`lux-btn ${ev.btnClass}`}>{b.label}</a>
-              ))}
+              {ev.buttons.map((b) =>
+                b.internal ? (
+                  <Link key={b.label} to={b.href as "/rsvp"} className={`lux-btn ${ev.btnClass}`}>{b.label}</Link>
+                ) : (
+                  <a key={b.label} href={b.href} target="_blank" rel="noreferrer" className={`lux-btn ${ev.btnClass}`}>{b.label}</a>
+                )
+              )}
             </div>
           </div>
           {show && ev.key === "m1" && turmericVisible && <TurmericReveal onReveal={revealTurmeric} />}
